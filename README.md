@@ -67,11 +67,6 @@ npm install
 npm run dev
 ```
 
-### Accessing the App
-- Open your browser and go to `http://localhost:5173` (or the port shown in your terminal)
-
-## Screenshots
-Add a screenshot named `codejam-screenshot.png` in the `frontend/public/` directory to display it above.
 
 ## License
 MIT License

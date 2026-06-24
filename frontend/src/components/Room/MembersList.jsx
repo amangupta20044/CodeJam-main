@@ -29,7 +29,7 @@ export default function MembersList({ clients = [], currentUsername = "" }) {
                   <p className="truncate text-xs font-semibold uppercase tracking-wider text-[var(--cj-text)]">
                     {name || "Anonymous"}
                   </p>
-                  <p className="cj-status-bracket mt-0.5 text-[10px]">
+                  <p className="cj-status-bracket font-mono text-[10px] uppercase tracking-widest text-amber-500/90 drop-shadow-sm">
                     [ ACTIVE ]
                   </p>
                 </div>

@@ -56,7 +56,7 @@ export default function RoomSidebar({
                 {username}
               </p>
               <div className="mt-1 flex items-center gap-2">
-                <span className="cj-status-bracket text-[10px]">[ ACTIVE ]</span>
+                <span className="cj-status-bracket font-mono text-[10px] uppercase tracking-widest text-amber-500/90 drop-shadow-sm">[ ACTIVE ]</span>
               </div>
             </div>
           </div>

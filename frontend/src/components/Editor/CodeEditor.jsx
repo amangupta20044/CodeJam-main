@@ -387,7 +387,7 @@ export default function CodeEditor({
       const msg =
         e.response?.data?.error ||
         e.message ||
-        "Could not reach the server. Is the backend running on port 5000?";
+        "Could not reach the server. Check that the backend is running.";
       const stamp = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",

@@ -1,10 +1,8 @@
 import axios from "axios";
-
-const APIN = import.meta.env.VITE_API_URL;
-const baseURL = APIN?.replace(/\/$/, "") || "http://localhost:5000";
+import { BACKEND_URL } from "../config";
 
 const API = axios.create({
-  baseURL,
+  baseURL: BACKEND_URL,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -14,7 +12,7 @@ export function getApiErrorMessage(error, fallback = "Request failed") {
   }
 
   if (error?.code === "ERR_NETWORK") {
-    return `Network error: cannot reach ${baseURL}. Check backend server and CORS config.`;
+    return `Network error: cannot reach ${BACKEND_URL}. Check backend server and CORS config.`;
   }
 
   if (error?.message) {

@@ -1,10 +1,7 @@
 import { io } from "socket.io-client";
+import { BACKEND_URL } from "../config";
 
-const API = import.meta.env.VITE_SOCKET_URL;
-
-const URL = API?.replace(/\/$/, "") || "http://localhost:5000";
-
-export const socket = io(URL, {
+export const socket = io(BACKEND_URL, {
   autoConnect: false,
   transports: ["websocket", "polling"],
 });

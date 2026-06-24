@@ -166,11 +166,13 @@ cd frontend
 npm install
 ```
 
-Optional — create `frontend/.env` if the API is not on localhost:5000:
+Optional — create `frontend/.env` (defaults to Render in production):
 
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=https://codejam-main.onrender.com
 ```
+
+For **local development**, `frontend/.env.development` uses `http://localhost:5000` automatically when you run `npm run dev`.
 
 Start the dev server:
 
@@ -244,7 +246,7 @@ Real-time events (see `backend/Actions.js` and `frontend/src/constants/actions.j
 | `JWT_SECRET` | Yes | Secret for signing JWT tokens |
 | `JDOODLE_CLIENT_ID` | Yes* | JDoodle client ID for `/compile` |
 | `JDOODLE_CLIENT_SECRET` | Yes* | JDoodle client secret |
-| `VITE_API_URL` | No | Frontend API base URL (default `http://localhost:5000`) |
+| `VITE_API_URL` | No | Backend URL for API + Socket.IO (default: Render in prod, localhost in dev) |
 
 \* Required for code execution. Without them, run returns a configuration error.
 

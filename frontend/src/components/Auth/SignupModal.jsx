@@ -127,18 +127,18 @@ export default function SignupModal({ open, setOpen, onSwitchToLogin }) {
             disabled={loading}
             className="cj-btn cj-btn-run flex w-full items-center justify-center gap-2 py-3 text-sm normal-case tracking-normal"
           >
-            <span className="font-bold">&gt;_</span>
+            {/* <span className="font-bold">&gt;_</span> */}
             {loading ? "Provisioning…" : "Create account"}
           </button>
         </form>
 
         <div className="border-t border-[var(--cj-border)] px-6 py-4">
           {onSwitchToLogin ? (
-            <p className="text-center text-sm text-[var(--cj-muted)]">
+            <p className="text-center text-sm  text-[var(--cj-muted)]">
               Already have an account?{" "}
               <button
                 type="button"
-                className="font-medium text-[var(--cj-success)] hover:underline"
+                className="font-medium cursor-pointer text-[var(--cj-success)] hover:underline"
                 onClick={() => {
                   setOpen(false);
                   onSwitchToLogin();
@@ -154,7 +154,7 @@ export default function SignupModal({ open, setOpen, onSwitchToLogin }) {
             onClick={() => setOpen(false)}
             className="cj-btn cj-btn-outline mt-3 w-full py-2 text-xs normal-case tracking-normal text-[var(--cj-text-secondary)]"
           >
-            [ ESC ] Close
+             Close
           </button>
         </div>
       </div>

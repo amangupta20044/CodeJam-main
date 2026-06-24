@@ -42,46 +42,55 @@ export default function LoginModal({ open, setOpen, onSwitchToSignup }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-title"
       onClick={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-[380px] rounded-2xl border border-slate-700 bg-slate-900 p-8 shadow-xl"
+        className="w-full max-w-[400px] border border-[var(--cj-border)] bg-[var(--cj-panel)] shadow-[var(--cj-shadow-md)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="login-title" className="mb-6 text-xl font-semibold text-white">
-          Log in
-        </h2>
+        <div className="border-b border-[var(--cj-border)] px-6 py-4">
+          <p className="cj-label mb-1">Authentication</p>
+          <h2
+            id="login-title"
+            className="cj-mono text-lg font-semibold tracking-wide text-[var(--cj-text)]"
+          >
+            [ LOGIN ]
+          </h2>
+          <p className="mt-1 text-xs text-[var(--cj-muted)]">
+            Access your CodeJam workspace
+          </p>
+        </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4 px-6 py-5">
           <div>
-            <label htmlFor="login-email" className="sr-only">
+            <label htmlFor="login-email" className="cj-label mb-1.5 block">
               Email
             </label>
             <input
               id="login-email"
               type="email"
               autoComplete="email"
-              placeholder="Email"
-              className="w-full rounded-xl border border-slate-600 bg-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              placeholder="you@example.com"
+              className="cj-input w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               disabled={loading}
             />
           </div>
           <div>
-            <label htmlFor="login-password" className="sr-only">
+            <label htmlFor="login-password" className="cj-label mb-1.5 block">
               Password
             </label>
             <input
               id="login-password"
               type="password"
               autoComplete="current-password"
-              placeholder="Password"
-              className="w-full rounded-xl border border-slate-600 bg-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              placeholder="••••••••"
+              className="cj-input w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               disabled={loading}
@@ -91,35 +100,38 @@ export default function LoginModal({ open, setOpen, onSwitchToSignup }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cj-btn cj-btn-run flex w-full items-center justify-center gap-2 py-3 text-sm normal-case tracking-normal"
           >
-            {loading ? "Signing in…" : "Log in"}
+            <span className="font-bold">&gt;_</span>
+            {loading ? "Authenticating…" : "Log in"}
           </button>
         </form>
 
-        {onSwitchToSignup ? (
-          <p className="mt-4 text-center text-sm text-slate-400">
-            No account?{" "}
-            <button
-              type="button"
-              className="font-medium text-emerald-400 hover:underline"
-              onClick={() => {
-                setOpen(false);
-                onSwitchToSignup();
-              }}
-            >
-              Sign up
-            </button>
-          </p>
-        ) : null}
+        <div className="border-t border-[var(--cj-border)] px-6 py-4">
+          {onSwitchToSignup ? (
+            <p className="text-center text-sm text-[var(--cj-muted)]">
+              No account?{" "}
+              <button
+                type="button"
+                className="font-medium text-[var(--cj-success)] hover:underline"
+                onClick={() => {
+                  setOpen(false);
+                  onSwitchToSignup();
+                }}
+              >
+                Sign up
+              </button>
+            </p>
+          ) : null}
 
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="mt-4 w-full text-center text-sm text-slate-500 hover:text-slate-300"
-        >
-          Close
-        </button>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="cj-btn cj-btn-outline mt-3 w-full py-2 text-xs normal-case tracking-normal text-[var(--cj-text-secondary)]"
+          >
+            [ ESC ] Close
+          </button>
+        </div>
       </div>
     </div>
   );

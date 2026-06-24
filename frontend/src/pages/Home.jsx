@@ -47,39 +47,35 @@ export default function Home() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-12">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--cj-bg)] px-4 py-12">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(16,185,129,0.15),transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.12),transparent)]"
         aria-hidden
       />
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-[var(--cj-text)]">
             CodeJam
           </h1>
-          <p className="mt-2 text-sm text-slate-400">
-            Real-time collaborative coding with Socket.IO & Monaco
+          <p className="mt-2 text-sm text-[var(--cj-muted)]">
+            Collaborative IDE — zinc / slate / indigo
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl shadow-black/40 backdrop-blur">
-          <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500">
-            Room ID
-          </label>
+        <div className="border border-[var(--cj-border)] bg-[var(--cj-panel)] p-8 shadow-[var(--cj-shadow-md)]">
+          <label className="cj-label mb-1.5 block">Room ID</label>
           <input
             placeholder="e.g. abc12345"
-            className="mb-4 w-full rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none ring-emerald-500/30 focus:border-emerald-600 focus:ring-2"
+            className="cj-input mb-4 w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
             value={roomId}
             onChange={(e) => setRoomId(e.target.value)}
             autoComplete="off"
           />
 
-          <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500">
-            Your name
-          </label>
+          <label className="cj-label mb-1.5 block">Your name</label>
           <input
             placeholder="How others see you"
-            className="mb-6 w-full rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none ring-emerald-500/30 focus:border-emerald-600 focus:ring-2"
+            className="cj-input mb-6 w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
@@ -89,16 +85,16 @@ export default function Home() {
           <button
             type="button"
             onClick={joinRoom}
-            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/30 transition hover:bg-emerald-500 cursor-pointer"
+            className="cj-btn cj-btn-run w-full py-3 text-sm"
           >
             Join room
           </button>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-[var(--cj-muted)]">
             No room yet?{" "}
             <button
               type="button"
-              className="font-medium text-emerald-400 underline-offset-2 hover:underline cursor-pointer"
+              className="font-medium text-[var(--cj-accent)] underline-offset-2 hover:underline cursor-pointer"
               onClick={createRoom}
             >
               Create a new room
@@ -106,16 +102,16 @@ export default function Home() {
           </p>
 
           {user ? (
-            <div className="mt-8 space-y-3 border-t border-slate-800 pt-6">
-              <p className="text-center text-sm text-slate-400">
+            <div className="mt-8 space-y-3 border-t border-[var(--cj-border-soft)] pt-6">
+              <p className="text-center text-sm text-[var(--cj-muted)]">
                 Signed in as{" "}
-                <span className="font-medium text-emerald-400">
+                <span className="font-medium text-[var(--cj-accent)]">
                   {user.username}
                 </span>
               </p>
               <button
                 type="button"
-                className="w-full rounded-lg border border-slate-600 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800 cursor-pointer"
+                className="cj-btn cj-btn-outline w-full py-2.5 text-sm normal-case tracking-normal"
                 onClick={() => {
                   logout();
                   toast.success("Logged out");
@@ -125,17 +121,17 @@ export default function Home() {
               </button>
             </div>
           ) : (
-            <div className="mt-8 flex gap-3 border-t border-slate-800 pt-6">
+            <div className="mt-8 flex gap-3 border-t border-[var(--cj-border-soft)] pt-6">
               <button
                 type="button"
-                className="flex-1 rounded-lg border border-slate-700 bg-slate-800/50 py-2.5 text-sm text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 cursor-pointer"
+                className="cj-btn cj-btn-outline flex-1 py-2.5 text-sm normal-case tracking-normal"
                 onClick={() => setLoginOpen(true)}
               >
                 Log in
               </button>
               <button
                 type="button"
-                className="flex-1 rounded-lg border border-slate-700 bg-slate-800/50 py-2.5 text-sm text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 cursor-pointer"
+                className="cj-btn cj-btn-outline flex-1 py-2.5 text-sm normal-case tracking-normal"
                 onClick={() => setSignupOpen(true)}
               >
                 Sign up

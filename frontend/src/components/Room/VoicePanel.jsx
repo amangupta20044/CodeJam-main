@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ACTIONS } from "../../constants/actions";
 import { socket } from "../../services/socket";
+import Avatar from "../common/Avatar";
 
 const ICE_SERVERS = [
   { urls: "stun:stun.l.google.com:19302" },
@@ -16,11 +17,12 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
   const [remoteStreams, setRemoteStreams] = useState({});
 
   const localStreamRef = useRef(null);
-  const peersRef = useRef(new Map()); // remoteSocketId -> { pc, iceQueue: RTCIceCandidateInit[] }
+  const peersRef = useRef(new Map());
 
   const ensurePeer = async (remoteSocketId) => {
     if (!remoteSocketId) return null;
-    if (peersRef.current.has(remoteSocketId)) return peersRef.current.get(remoteSocketId).pc;
+    if (peersRef.current.has(remoteSocketId))
+      return peersRef.current.get(remoteSocketId).pc;
 
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
     const state = { pc, iceQueue: [] };
@@ -40,7 +42,6 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
       setRemoteStreams((prev) => ({ ...prev, [remoteSocketId]: stream }));
     };
 
-    // Add mic tracks if we already have them
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach((track) => {
         pc.addTrack(track, localStreamRef.current);
@@ -66,14 +67,14 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
   };
 
   const startOfferIfNeeded = async (remoteSocketId) => {
-    const pc = peersRef.current.get(remoteSocketId)?.pc ?? (await ensurePeer(remoteSocketId));
+    const pc =
+      peersRef.current.get(remoteSocketId)?.pc ??
+      (await ensurePeer(remoteSocketId));
     if (!pc) return;
 
     const localId = socket.id;
     if (!localId) return;
 
-    // Deterministic initiator to prevent offer collisions:
-    // the peer with lexicographically smaller socket id initiates.
     const iAmInitiator = localId.localeCompare(remoteSocketId) < 0;
     if (!iAmInitiator) return;
 
@@ -85,7 +86,7 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
         to: remoteSocketId,
         sdp: pc.localDescription,
       });
-    } catch (e) {
+    } catch {
       // ignore renegotiation failures
     }
   };
@@ -131,7 +132,6 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
       const pc = state?.pc ?? (await ensurePeer(from));
       if (!pc) return;
 
-      // If remote description isn't set yet, queue candidates.
       if (!pc.remoteDescription) {
         const st = peersRef.current.get(from);
         if (st) st.iceQueue.push(candidate);
@@ -171,12 +171,10 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
     const localId = socket.id;
     if (!localId) return;
 
-    // Create peers for all existing remote users
     clients.forEach(({ socketId }) => {
       if (!socketId || socketId === localId) return;
       ensurePeer(socketId).then(() => startOfferIfNeeded(socketId));
     });
-    // Also handle future peers via onClientsChange triggers; VoicePanel re-renders when clients changes.
   }, [clients, micReady]);
 
   const enableMic = async () => {
@@ -185,7 +183,6 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       localStreamRef.current = stream;
 
-      // Start muted; push-to-talk will enable
       stream.getAudioTracks().forEach((t) => {
         t.enabled = false;
       });
@@ -218,38 +215,42 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
   };
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900/40">
-      <div className="flex items-center justify-between gap-2 border-b border-slate-800 px-3 py-2">
-        <h3 className="text-sm font-semibold text-slate-200">Voice</h3>
-        <span
-          className={`text-xs ${
-            micReady ? (muted ? "text-amber-400" : "text-emerald-400") : "text-slate-500"
-          }`}
-        >
-          {!micReady ? "Mic off" : muted ? "Muted" : "Live (push to talk)"}
-        </span>
-      </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="mb-3 border border-[var(--cj-border)] bg-[var(--cj-surface)] p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-sm font-semibold text-[var(--cj-text)]">Voice</p>
+          <span
+            className={`text-xs ${
+              micReady
+                ? muted
+                  ? "text-amber-400"
+                  : "text-[var(--cj-success)]"
+                : "text-[var(--cj-muted)]"
+            }`}
+          >
+            {!micReady ? "Mic off" : muted ? "Muted" : "Live"}
+          </span>
+        </div>
 
-      <div className="p-3">
         {!micReady ? (
           <>
             <button
               type="button"
               onClick={enableMic}
-              className="w-full rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+              className="cj-btn cj-btn-outline w-full py-2 normal-case tracking-normal"
             >
               Enable voice
             </button>
             {micError ? (
-              <p className="mt-2 text-xs text-red-400">{micError}</p>
+              <p className="mt-2 text-xs text-[var(--cj-danger)]">{micError}</p>
             ) : (
-              <p className="mt-2 text-xs text-slate-500">
-                Uses WebRTC. Click enable, then hold “Push to talk”.
+              <p className="mt-2 text-xs text-[var(--cj-muted)]">
+                WebRTC voice chat. Hold push-to-talk to speak.
               </p>
             )}
           </>
         ) : (
-          <>
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -257,8 +258,8 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
                 onPointerUp={handleTalkUp}
                 onPointerCancel={handleTalkUp}
                 onPointerLeave={handleTalkUp}
-                className={`flex-1 rounded-md px-3 py-2 text-sm font-medium text-white transition ${
-                  talking ? "bg-emerald-500" : "bg-indigo-600 hover:bg-indigo-500"
+                className={`cj-btn flex-1 py-2 normal-case tracking-normal ${
+                  talking ? "cj-btn-run" : "cj-btn-outline"
                 }`}
               >
                 {talking ? "Talking…" : "Push to talk"}
@@ -269,35 +270,49 @@ export default function VoicePanel({ roomId, username, clients = [] }) {
                   setMuted((prev) => {
                     const next = !prev;
                     if (next) {
-                      // now muted
                       setTalking(false);
                       setTrackEnabled(false);
                     }
                     return next;
                   });
                 }}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition ${
-                  muted
-                    ? "bg-red-600 text-white hover:bg-red-500"
-                    : "bg-slate-800 text-slate-200 hover:bg-slate-700"
+                className={`cj-btn px-3 py-2 normal-case tracking-normal ${
+                  muted ? "cj-btn-danger-outline" : "cj-btn-outline"
                 }`}
               >
                 {muted ? "Unmute" : "Mute"}
               </button>
             </div>
-
-            <div className="mt-2 text-xs text-slate-500">
-              {clients.length > 1 ? "Peers connected: " + (clients.length - 1) : "Waiting for peers…"}
-            </div>
-          </>
+            <p className="text-xs text-[var(--cj-muted)]">
+              {clients.length > 1
+                ? `${clients.length - 1} peer(s) in room`
+                : "Waiting for peers…"}
+            </p>
+          </div>
         )}
+      </div>
 
-        {/* Render remote audio elements */}
-        <div className="mt-3 space-y-2">
-          {Object.entries(remoteStreams).map(([remoteId, stream]) => (
-            <RemoteAudio key={remoteId} stream={stream} />
-          ))}
-        </div>
+      <p className="cj-label mb-2">In voice channel</p>
+      <div className="cj-scrollbar min-h-0 flex-1 space-y-1.5 overflow-y-auto">
+        {clients.length === 0 ? (
+          <p className="text-xs text-[var(--cj-muted)]">No one connected yet.</p>
+        ) : (
+          clients.map(({ socketId, username: name }) => (
+            <div
+              key={socketId}
+              className="flex items-center gap-2 rounded-lg px-2 py-1.5"
+            >
+              <Avatar name={name || "Anonymous"} size="sm" />
+              <span className="truncate text-sm">{name || "Anonymous"}</span>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="hidden">
+        {Object.entries(remoteStreams).map(([remoteId, stream]) => (
+          <RemoteAudio key={remoteId} stream={stream} />
+        ))}
       </div>
     </div>
   );
@@ -313,4 +328,3 @@ function RemoteAudio({ stream }) {
 
   return <audio ref={ref} autoPlay playsInline />;
 }
-

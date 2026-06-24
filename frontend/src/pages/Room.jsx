@@ -54,7 +54,7 @@ export default function Room() {
   }
 
   return (
-    <div className="flex h-screen min-h-0 bg-slate-950 text-slate-100">
+    <div className="flex h-screen min-h-0 bg-[var(--cj-bg)] text-[var(--cj-text)]">
       <RoomSidebar
         roomId={id}
         username={username}
@@ -67,6 +67,7 @@ export default function Room() {
           roomId={id}
           username={username}
           isAdmin={isAdmin}
+          clients={clients}
           onClientsChange={setClients}
           onFilesChange={setFiles}
           onFilePresenceChange={setFilePresence}

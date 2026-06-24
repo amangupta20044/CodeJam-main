@@ -13,8 +13,31 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Toaster
         position="top-center"
         toastOptions={{
-          className:
-            "!bg-slate-800 !text-slate-100 !border !border-slate-700",
+          icon: ">",
+          style: {
+            background: "#18181b",
+            color: "#f4f4f5",
+            border: "1px solid #27272a",
+            borderRadius: "0",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+            fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+            fontSize: "11px",
+            letterSpacing: "0.04em",
+          },
+          success: {
+            icon: ">",
+            style: {
+              border: "1px solid #27272a",
+              color: "#f4f4f5",
+            },
+          },
+          error: {
+            icon: "!",
+            style: {
+              border: "1px solid #7f1d1d",
+              color: "#fca5a5",
+            },
+          },
         }}
       />
     </AuthProvider>

@@ -6,7 +6,7 @@ const ACTIONS = require("./Actions");
 const cors = require("cors");
 const axios = require("axios");
 const server = http.createServer(app);
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 const connectDB = require("./src/db/db");
 const Room = require("./src/models/room.model");
 const RoomFile = require("./src/models/file.model");

@@ -52,61 +52,70 @@ export default function SignupModal({ open, setOpen, onSwitchToLogin }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-labelledby="signup-title"
       onClick={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-[380px] rounded-2xl border border-slate-700 bg-slate-900 p-8 shadow-xl"
+        className="w-full max-w-[400px] border border-[var(--cj-border)] bg-[var(--cj-panel)] shadow-[var(--cj-shadow-md)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="signup-title" className="mb-6 text-xl font-semibold text-white">
-          Create account
-        </h2>
+        <div className="border-b border-[var(--cj-border)] px-6 py-4">
+          <p className="cj-label mb-1">Registration</p>
+          <h2
+            id="signup-title"
+            className="cj-mono text-lg font-semibold tracking-wide text-[var(--cj-text)]"
+          >
+            [ SIGN UP ]
+          </h2>
+          <p className="mt-1 text-xs text-[var(--cj-muted)]">
+            Create a node profile for collaborative sessions
+          </p>
+        </div>
 
-        <form onSubmit={handleSignup} className="space-y-4">
+        <form onSubmit={handleSignup} className="space-y-4 px-6 py-5">
           <div>
-            <label htmlFor="signup-username" className="sr-only">
+            <label htmlFor="signup-username" className="cj-label mb-1.5 block">
               Display name
             </label>
             <input
               id="signup-username"
               type="text"
               autoComplete="username"
-              placeholder="Display name (used in rooms)"
-              className="w-full rounded-xl border border-slate-600 bg-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              placeholder="How others see you in rooms"
+              className="cj-input w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               disabled={loading}
             />
           </div>
           <div>
-            <label htmlFor="signup-email" className="sr-only">
+            <label htmlFor="signup-email" className="cj-label mb-1.5 block">
               Email
             </label>
             <input
               id="signup-email"
               type="email"
               autoComplete="email"
-              placeholder="Email"
-              className="w-full rounded-xl border border-slate-600 bg-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              placeholder="you@example.com"
+              className="cj-input w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               disabled={loading}
             />
           </div>
           <div>
-            <label htmlFor="signup-password" className="sr-only">
+            <label htmlFor="signup-password" className="cj-label mb-1.5 block">
               Password
             </label>
             <input
               id="signup-password"
               type="password"
               autoComplete="new-password"
-              placeholder="Password (min. 6 characters)"
-              className="w-full rounded-xl border border-slate-600 bg-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              placeholder="Minimum 6 characters"
+              className="cj-input w-full px-4 py-3 text-[var(--cj-text)] placeholder:text-[var(--cj-muted)]"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               disabled={loading}
@@ -116,35 +125,38 @@ export default function SignupModal({ open, setOpen, onSwitchToLogin }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cj-btn cj-btn-run flex w-full items-center justify-center gap-2 py-3 text-sm normal-case tracking-normal"
           >
-            {loading ? "Creating account…" : "Sign up"}
+            <span className="font-bold">&gt;_</span>
+            {loading ? "Provisioning…" : "Create account"}
           </button>
         </form>
 
-        {onSwitchToLogin ? (
-          <p className="mt-4 text-center text-sm text-slate-400">
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="font-medium text-emerald-400 hover:underline"
-              onClick={() => {
-                setOpen(false);
-                onSwitchToLogin();
-              }}
-            >
-              Log in
-            </button>
-          </p>
-        ) : null}
+        <div className="border-t border-[var(--cj-border)] px-6 py-4">
+          {onSwitchToLogin ? (
+            <p className="text-center text-sm text-[var(--cj-muted)]">
+              Already have an account?{" "}
+              <button
+                type="button"
+                className="font-medium text-[var(--cj-success)] hover:underline"
+                onClick={() => {
+                  setOpen(false);
+                  onSwitchToLogin();
+                }}
+              >
+                Log in
+              </button>
+            </p>
+          ) : null}
 
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="mt-4 w-full text-center text-sm text-slate-500 hover:text-slate-300"
-        >
-          Close
-        </button>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="cj-btn cj-btn-outline mt-3 w-full py-2 text-xs normal-case tracking-normal text-[var(--cj-text-secondary)]"
+          >
+            [ ESC ] Close
+          </button>
+        </div>
       </div>
     </div>
   );
